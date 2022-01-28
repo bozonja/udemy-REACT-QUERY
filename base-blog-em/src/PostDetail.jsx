@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 
 async function fetchComments(postId) {
   const response = await fetch(
@@ -29,6 +29,8 @@ export function PostDetail({ post }) {
     () => fetchComments(post.id)
   );
 
+  const deleteMutation = useMutation(() => deletePost(post.id));
+
   return (
     <>
       {isLoading && <div>Loading...</div>}
@@ -40,7 +42,16 @@ export function PostDetail({ post }) {
       {data && (
         <>
           <h3 style={{ color: "blue" }}>{post.title}</h3>
-          <button>Delete</button> <button>Update title</button>
+          <button onClick={() => deleteMutation.mutate()}>Delete</button>
+          {console.log(deleteMutation)}
+          <button>Update title</button>
+          {deleteMutation.isSuccess && (
+            <p style={{ color: "green" }}>
+              Dobar! (ali ne zapravo jer tako ne radi jsonplaceholder :D)
+            </p>
+          )}
+          {deleteMutation.isError && <p style={{ color: "red" }}>Ajooooj</p>}
+          {deleteMutation.isLoading && <p>Loading....</p>}
           <p>{post.body}</p>
           <h4>Comments</h4>
           {data.map((comment) => (
