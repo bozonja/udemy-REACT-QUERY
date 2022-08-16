@@ -29,7 +29,6 @@ export function useReserveAppointment(): UseMutateFunction<
   const toast = useCustomToast();
   const queryClient = useQueryClient();
 
-  // TODO: replace with mutate function
   const { mutate } = useMutation(
     (appointment: Appointment) => setAppointmentUser(appointment, user?.id),
     {
